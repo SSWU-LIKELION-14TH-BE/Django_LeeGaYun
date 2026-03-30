@@ -1,7 +1,7 @@
 from django import forms
 
 class FindPasswordForm(forms.Form):
-    phone_number = forms.CharField(label='전화번호', max_length=15)
+    email = forms.EmailField(label='이메일')
 
 class VerifyCodeForm(forms.Form):
     code = forms.CharField(label='인증번호', max_length=6)

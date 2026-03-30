@@ -3,14 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>홈</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
-    <h2>홈</h2>
+    <div class="home-wrapper">
+        <div class="home-title">
+            Port<br><span class="folio">folio</span>
+        </div>
+        <a href="#" class="home-project-btn">프로젝트 모아보기</a>
+    </div>
+
     {% if user.is_authenticated %}
-        <form action="{% url 'logout' %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit">로그아웃</button>
-        </form>
+    <form action="{% url 'logout' %}" method="post" class="logout-btn">
+        {% csrf_token %}
+        <button type="submit">로그아웃</button>
+    </form>
     {% endif %}
 </body>
 </html>

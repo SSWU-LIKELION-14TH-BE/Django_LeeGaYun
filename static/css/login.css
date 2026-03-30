@@ -1,0 +1,82 @@
+body {
+    background: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+}
+
+.login-wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2253f7;
+    margin-bottom: 10px;
+}
+
+.login-input {
+    width: 250px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.login-input::placeholder {
+    color: #aaa;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 5px 20px;
+    background: #ff6b3d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+.login-btn:hover {
+    background: #e55b2d;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #2253f733;
+}
+
+.login-find-password a{
+    text-decoration: none;
+    color: rgb(57, 57, 57);
+    font-size: 15px;
+}
+
+.login-find-password {
+    margin-top: 7px;
+}
+
+.login-find-password a:hover {
+    text-decoration: underline;
+}

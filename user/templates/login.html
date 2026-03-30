@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
-    <h2>로그인</h2>
-    <form method="post">
-        {% csrf_token %} 
-        {{ form.as_p }}
-        <button type="submit">로그인</button>
-    </form>
-    <p><a href="{% url 'find_password' %}">비밀번호 찾기</a></p>
+    <div class="login-wrapper">
+        <div class="login-title">로그인</div>
+        <form method="post" class="login-form">
+            {% csrf_token %} 
+            {{ form.as_p }}
+            <button type="submit" class="login-btn">로그인</button>
+        </form>
+        <div class="login-find-password"><a href="{% url 'find_password' %}">비밀번호 찾기</a></div>
+    </div>
 </body>
 </html>

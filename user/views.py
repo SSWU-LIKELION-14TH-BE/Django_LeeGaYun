@@ -6,39 +6,61 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms_password import FindPasswordForm, VerifyCodeForm, ResetPasswordForm
 from .models import CustomUser
 import random
-def find_password_view(request):
-    if request.method == 'POST':
-        form = FindPasswordForm(request.POST)
-        if form.is_valid():
-            phone = form.cleaned_data['phone_number']
-            try:
-                user = CustomUser.objects.get(phone_number=phone)
-            except CustomUser.DoesNotExist:
-                return render(request, 'find_password.html', {'form': form, 'error': '등록된 전화번호가 없습니다.'})
-            code = str(random.randint(100000, 999999))
-            request.session['find_pw_phone'] = phone
-            request.session['find_pw_code'] = code
-            print(f"[인증번호] {code}")  # 실제 서비스에서는 문자로 전송
-            return redirect('verify_code')
-    else:
-        form = FindPasswordForm()
-    return render(request, 'find_password.html', {'form': form})
+from django.core.mail import send_mail
 
-def verify_code_view(request):
-    if 'find_pw_code' not in request.session:
-        return redirect('find_password')
+def find_password_view(request):
+    step = request.session.get('step', 1)
+
     if request.method == 'POST':
-        form = VerifyCodeForm(request.POST)
-        if form.is_valid():
-            code = form.cleaned_data['code']
-            if code == request.session.get('find_pw_code'):
+        # 이메일 입력
+        if 'send_code' in request.POST:
+            email = request.POST.get('email')
+
+            try:
+                user = CustomUser.objects.get(email=email)
+            except CustomUser.DoesNotExist:
+                return render(request, 'find_password.html', {
+                    'error': '등록된 이메일이 없습니다.',
+                    'step': 1
+                })
+
+            import random
+            code = str(random.randint(100000, 999999))
+
+            request.session['find_pw_email'] = email
+            request.session['find_pw_code'] = code
+            request.session['step'] = 2
+
+            from django.core.mail import send_mail
+            send_mail(
+                '인증코드',
+                f'인증번호: {code}',
+                None,
+                [email],
+                fail_silently=False,
+            )
+
+            return render(request, 'find_password.html', {
+                'message': '인증번호가 전송되었습니다.',
+                'step': 2
+            })
+
+        # 인증번호 확인
+        elif 'verify_code' in request.POST:
+            input_code = request.POST.get('code')
+            real_code = request.session.get('find_pw_code')
+
+            if input_code == real_code:
                 request.session['pw_reset_ok'] = True
+                request.session['step'] = 1  # 초기화
                 return redirect('reset_password')
             else:
-                return render(request, 'verify_code.html', {'form': form, 'error': '인증번호가 일치하지 않습니다.'})
-    else:
-        form = VerifyCodeForm()
-    return render(request, 'verify_code.html', {'form': form})
+                return render(request, 'find_password.html', {
+                    'error': '인증번호가 틀렸습니다.',
+                    'step': 2
+                })
+
+    return render(request, 'find_password.html', {'step': step})
 
 def reset_password_view(request):
     if not request.session.get('pw_reset_ok'):
@@ -49,13 +71,13 @@ def reset_password_view(request):
             pw1 = form.cleaned_data['new_password1']
             pw2 = form.cleaned_data['new_password2']
             if pw1 != pw2:
-                return render(request, 'reset_password.html', {'form': form, 'error': '비밀번호가 일치하지 않습니다.'})
-            phone = request.session.get('find_pw_phone')
+                return render(request, 'change_password.html', {'form': form, 'error': '비밀번호가 일치하지 않습니다.'})
+            email = request.session.get('find_pw_email')
             try:
-                user = CustomUser.objects.get(phone_number=phone)
+                user = CustomUser.objects.get(email=email)
                 user.set_password(pw1)
                 user.save()
-                for k in ['find_pw_phone', 'find_pw_code', 'pw_reset_ok']:
+                for k in ['find_pw_email', 'find_pw_code', 'pw_reset_ok']:
                     if k in request.session:
                         del request.session[k]
                 return redirect('login')
