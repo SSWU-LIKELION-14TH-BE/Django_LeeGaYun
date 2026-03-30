@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 
 def find_password_view(request):
     step = request.session.get('step', 1)
+    email = ''
 
     if request.method == 'POST':
         # 이메일 입력
@@ -21,7 +22,8 @@ def find_password_view(request):
             except CustomUser.DoesNotExist:
                 return render(request, 'find_password.html', {
                     'error': '등록된 이메일이 없습니다.',
-                    'step': 1
+                    'step': 1,
+                    'email': email
                 })
 
             import random
@@ -42,13 +44,15 @@ def find_password_view(request):
 
             return render(request, 'find_password.html', {
                 'message': '인증번호가 전송되었습니다.',
-                'step': 2
+                'step': 2,
+                'email': email
             })
 
         # 인증번호 확인
         elif 'verify_code' in request.POST:
             input_code = request.POST.get('code')
             real_code = request.session.get('find_pw_code')
+            email = request.session.get('find_pw_email', '')
 
             if input_code == real_code:
                 request.session['pw_reset_ok'] = True
@@ -57,10 +61,12 @@ def find_password_view(request):
             else:
                 return render(request, 'find_password.html', {
                     'error': '인증번호가 틀렸습니다.',
-                    'step': 2
+                    'step': 2,
+                    'email': email
                 })
 
-    return render(request, 'find_password.html', {'step': step})
+    email = request.session.get('find_pw_email', '')
+    return render(request, 'find_password.html', {'step': step, 'email': email})
 
 def reset_password_view(request):
     if not request.session.get('pw_reset_ok'):
