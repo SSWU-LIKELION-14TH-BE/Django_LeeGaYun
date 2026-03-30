@@ -69,8 +69,8 @@ input:focus {
 
 .login-find-password a{
     text-decoration: none;
-    color: rgb(57, 57, 57);
-    font-size: 15px;
+    color: rgb(105, 105, 105);
+    font-size: 14px;
 }
 
 .login-find-password {
