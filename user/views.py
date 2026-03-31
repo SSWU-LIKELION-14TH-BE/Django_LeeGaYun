@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.urls import reverse
 from .forms import SignUpForm
-from django.contrib.auth.forms import AuthenticationForm
+from .forms import LoginForm
 from .forms_password import FindPasswordForm, VerifyCodeForm, ResetPasswordForm
 from .models import CustomUser
 import random
@@ -108,13 +108,13 @@ def signup_view(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = LoginForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             return redirect('home') # 로그인 후 홈 페이지로 이동
     else:
-        form = AuthenticationForm()
+        form = LoginForm(request)
 
     return render(request, 'login.html', {'form': form})
 
