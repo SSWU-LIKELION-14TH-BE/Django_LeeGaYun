@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-title">로그인</div>
+        <form method="post" class="login-form">
+            {% csrf_token %} 
+            <div class="login-input-box">
+            {{ form.username }}
+            </div>
+            <div class="login-input-box">
+            {{ form.password }}
+            </div>
+            <button type="submit" class="login-btn">로그인</button>
+        </form>
+        <div class="login-links">
+            <a href="{% url 'find_password' %}">비밀번호 변경</a>
+            <span>|</span>
+            <a href="{% url 'signup' %}">회원가입</a>
+        </div>
+    </div>
+</body>
+</html>
