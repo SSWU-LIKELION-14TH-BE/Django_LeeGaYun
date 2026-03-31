@@ -5,6 +5,18 @@ from .models import CustomUser
 
 class SignUpForm(UserCreationForm):
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if CustomUser.objects.filter(username=username).exists():
+            raise forms.ValidationError('이미 사용 중인 닉네임입니다.')
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError('이미 사용 중인 이메일입니다.')
+        return email
+
     user_id = forms.CharField(
         label='',
         max_length=30,
