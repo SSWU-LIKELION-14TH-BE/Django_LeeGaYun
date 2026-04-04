@@ -3,5 +3,6 @@ venv311
 db.sqlite3
 *.pyc
 */migrations/
+media/
 
 .env
