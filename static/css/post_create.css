@@ -1,0 +1,49 @@
+.post-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+}
+
+.post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.post-field label {
+    font-weight: bold;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.post-input, .post-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.post-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.post-btn {
+    width: 200px;
+    padding: 12px;
+    background: #2253f7;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.post-btn:hover {
+    background: #183bb3;
+}

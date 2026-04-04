@@ -1,0 +1,49 @@
+.post-wrapper {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 32px 24px;
+}
+
+.post-wrapper h2 {
+    font-size: 2.2rem;
+    color: #2253f7;
+    margin-bottom: 12px;
+}
+
+.post-detail-image {
+    max-width: 80%;
+    margin: 18px 0;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+
+.post-detail-tech, .post-detail-github {
+    margin: 12px 0;
+    font-size: 1.05em;
+}
+
+.post-detail-github a {
+    color: #2253f7;
+    text-decoration: underline;
+}
+
+.post-content {
+    margin: 24px 0;
+    font-size: 1.13em;
+    line-height: 1.7;
+}
+
+.post-detail-create-btn {
+    display: inline-block;
+    background: #ff6b3d;
+    color: #fff;
+    padding: 8px 24px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 18px;
+}
+.post-detail-create-btn:hover {
+    background: #e24a1a;
+}
