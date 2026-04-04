@@ -8,7 +8,7 @@ class SignUpForm(UserCreationForm):
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if CustomUser.objects.filter(username=username).exists():
-            raise forms.ValidationError('이미 사용 중인 닉네임입니다.')
+            raise forms.ValidationError('이미 사용 중인 아이디입니다.')
         return username
 
     def clean_email(self):
@@ -22,7 +22,7 @@ class SignUpForm(UserCreationForm):
         max_length=30,
         widget=forms.TextInput(attrs={
             'class': 'signup-input',
-            'placeholder': '아이디'
+            'placeholder': '닉네임'
         })
     )
 
@@ -31,7 +31,7 @@ class SignUpForm(UserCreationForm):
         max_length=150,
         widget=forms.TextInput(attrs={
             'class': 'signup-input',
-            'placeholder': '닉네임'
+            'placeholder': '아이디'
         })
     )
 
@@ -87,7 +87,7 @@ class LoginForm(AuthenticationForm):
         label='',
         widget=forms.TextInput(attrs={
             'class': 'login-input',
-            'placeholder': '닉네임'
+            'placeholder': '아이디'
         })
     )
 
