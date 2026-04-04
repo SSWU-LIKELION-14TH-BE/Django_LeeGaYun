@@ -8,8 +8,25 @@
 </head>
 <body>
     <div class="post-wrapper">
-        <h2>{{ post.title }}</h2>
-        <p><strong>작성자:</strong> {{ post.author.user_id }} ㅣ <strong>작성일:</strong> {{ post.created_at|date:"Y-m-d H:i" }}</p>
+        <div class="post-title-like-row">
+            <h2 class="post-title">{{ post.title }}</h2>
+            <div class="post-like-section post-like-top">
+                <form method="post" action="{% url 'post_like' post.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="like-btn">
+                        {% if user.is_authenticated and user in post.likes.all %}
+                            ❤️
+                        {% else %}
+                            🤍
+                        {% endif %}
+                    </button>
+                </form>
+                <div class="like-count-text">
+                    좋아요(<span id="like-count">{{ post.like_count }}</span>)
+                </div>
+            </div>
+        </div>
+        <p><strong>작성자:</strong> {{ post.author.user_id }} | <strong>작성일:</strong> {{ post.created_at|date:"Y-m-d H:i" }}</p>
         {% if post.image %}
             <img src="{{ post.image.url }}" alt="이미지" class="post-detail-image">
         {% endif %}
@@ -17,7 +34,7 @@
             {{ post.content|linebreaksbr }}
         </div>
         <div class="post-detail-tech">
-            <strong>기술 스택 선택:</strong> {{ post.tech_stack }}
+            <strong>기술스택:</strong> {{ post.tech_stack }}
         </div>
         <div class="post-detail-github">
             <strong>깃허브 링크:</strong>
@@ -26,6 +43,71 @@
             {% else %}
                 없음
             {% endif %}
+        </div>
+        <!-- 댓글 작성 폼 -->
+        <div class="comment-form-section">
+            <form method="post">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit" name="comment_submit" class="comment-btn">댓글 작성</button>
+            </form>
+        </div>
+        <!-- 댓글 목록 -->
+        <div class="comment-section">
+            <h3>댓글</h3>
+            {% for comment in comments %}
+                <div class="comment-list">
+                    <div class="comment-meta">
+                        <span class="comment-author">{{ comment.author.user_id }}</span>
+                        <span class="comment-date">{{ comment.created_at|date:"Y-m-d H:i" }}</span>
+                    </div>
+                    <div class="comment-content">{{ comment.content|linebreaksbr }}</div>
+                    <div class="comment-like-row">
+                        <form method="post" action="{% url 'comment_like' comment.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="comment-like-btn">
+                                {% if user.is_authenticated and user in comment.likes.all %}
+                                    ❤️
+                                {% else %}
+                                    🤍
+                                {% endif %}
+                            </button>
+                        </form>
+                        <span class="comment-like-count-text">좋아요({{ comment.like_count }})</span>
+                    </div>
+                    <form method="post" style="display:inline;" class="reply-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                        <textarea name="content" rows="1" placeholder="답글을 입력하세요" class="comment-input"></textarea>
+                        <button type="submit" name="comment_submit" class="reply-btn">답글</button>
+                    </form>
+                    <!-- 대댓글 -->
+                    {% for reply in comment.replies.all %}
+                        <div class="reply">
+                            <div class="comment-meta">
+                               ㄴ<span class="comment-author">{{ reply.author.user_id }}</span>
+                                <span class="comment-date">{{ reply.created_at|date:"Y-m-d H:i" }}</span>
+                            </div>
+                            <div class="comment-content">{{ reply.content|linebreaksbr }}</div>
+                            <div class="comment-like-row">
+                                <form method="post" action="{% url 'comment_like' reply.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="comment-like-btn">
+                                        {% if user.is_authenticated and user in reply.likes.all %}
+                                            ❤️
+                                        {% else %}
+                                            🤍
+                                        {% endif %}
+                                    </button>
+                                </form>
+                                <span class="comment-like-count-text">좋아요({{ reply.like_count }})</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% empty %}
+                <p>아직 댓글이 없습니다.</p>
+            {% endfor %}
         </div>
         <a href="{% url 'post_create' %}" class="post-detail-create-btn">새 게시물 작성</a>
     </div>
