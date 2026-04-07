@@ -11,8 +11,29 @@
     margin-bottom: 12px;
 }
 
+.post-title-like-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.post-title {
+    margin: 0;
+    font-size: 2.2rem;
+    color: #2253f7;
+    flex: 1;
+}
+
+.post-like-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 80px;
+}
+
 .post-detail-image {
-    max-width: 80%;
+    max-width: 100%;
     margin: 18px 0;
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.07);
@@ -44,6 +65,33 @@
     font-weight: 600;
     margin-top: 18px;
 }
+
 .post-detail-create-btn:hover {
     background: #e24a1a;
+}
+
+.post-like-section {
+    margin: 24px 0 0 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.like-btn {
+    border: none;
+    border-radius: 20px;
+    padding: 8px 22px;
+    font-size: 1.08em;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    background: none;
+}
+
+.comment-like-btn{
+    border: none;
+    background: none;
+    font-size: 1.1em;
+    cursor: pointer;
+    margin-bottom: 20px;
 }
