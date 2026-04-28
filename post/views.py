@@ -4,6 +4,20 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import PostForm, CommentForm
 from .models import Post, Comment
+from django.db.models import Count
+
+# 게시글 목록 및 검색 뷰
+def post_list_view(request):
+	query = request.GET.get('q', '')
+	sort = request.GET.get('sort', 'new')
+	posts = Post.objects.all()
+	if query:
+		posts = posts.filter(title__icontains=query)
+	if sort == 'popular':
+		posts = posts.annotate(like_count=Count('likes')).order_by('-like_count', '-created_at')
+	else:
+		posts = posts.order_by('-created_at')
+	return render(request, 'post_list.html', {'posts': posts})
 
 @login_required
 def post_create_view(request):
@@ -20,6 +34,10 @@ def post_create_view(request):
 
 def post_detail_view(request, pk):
 	post = get_object_or_404(Post, pk=pk)
+	# 조회수 증가 (본인 새로고침/중복 방지 없이 단순 증가)
+	post.views = post.views + 1
+	post.save(update_fields=["views"])
+
 	comments = Comment.objects.filter(post=post, parent__isnull=True).order_by('-created_at')
 	comment_form = CommentForm()
 

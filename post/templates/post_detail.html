@@ -26,7 +26,11 @@
                 </div>
             </div>
         </div>
-        <p><strong>작성자:</strong> {{ post.author.user_id }} | <strong>작성일:</strong> {{ post.created_at|date:"Y-m-d H:i" }}</p>
+        <p>
+            <strong>작성자:</strong> {{ post.author.user_id }} | <strong>작성일:</strong> {{ post.created_at|date:"Y-m-d H:i" }}
+            <br>
+            <span style="color:#888; font-size:0.98em;">조회수: {{ post.views }}</span>
+        </p>
         {% if post.image %}
             <img src="{{ post.image.url }}" alt="이미지" class="post-detail-image">
         {% endif %}
