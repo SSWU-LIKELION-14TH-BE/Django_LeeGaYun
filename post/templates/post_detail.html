@@ -36,7 +36,7 @@
             </div>
         </div>
         <p>
-            <strong>작성자:</strong> {{ post.author.user_id }} | <strong>작성일:</strong> {{ post.created_at|date:"Y-m-d H:i" }}
+            <strong>작성자:</strong> <a href="{% url 'profile' post.author.username %}" style="color:#2253f7; text-decoration:underline;">{{ post.author.user_id }}</a> | <strong>작성일:</strong> {{ post.created_at|date:"Y-m-d H:i" }}
             <br>
             <span style="color:#888; font-size:0.98em;">조회수: {{ post.views }}</span>
         </p>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ profile_user.user_id }}님의 프로필</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}">
+</head>
+<body>
+    <div class="mypage-wrapper">
+        <h2>{{ profile_user.user_id }}님의 프로필</h2>
+        <ul>
+            <li>아이디: {{ profile_user.username }}</li>
+            <li>닉네임: {{ profile_user.user_id }}</li>
+            <li>이메일: {{ profile_user.email }}</li>
+        </ul>
+        {% if guestbook_form %}
+        <form method="post">
+            {% csrf_token %}
+            {{ guestbook_form.as_p }}
+            <button type="submit" class="mypage-edit-btn">방명록 남기기</button>
+        </form>
+        {% endif %}

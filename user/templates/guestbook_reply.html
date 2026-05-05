@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>방명록 답글</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}">
+</head>
+<body>
+    <div class="mypage-wrapper">
+        <h2>방명록 답글</h2>
+        <div style="margin-bottom:16px;">
+            <b>{{ guestbook.author.user_id }}</b> ({{ guestbook.created_at|date:"Y-m-d H:i" }})<br>
+            {{ guestbook.content|linebreaksbr }}
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <textarea name="content" rows="2" placeholder="답글을 입력하세요" class="signup-input"></textarea>
+            <button type="submit" class="mypage-edit-btn">답글 등록</button>
+        </form>
+        <a href="{% url 'my_guestbook' %}">내 방명록으로 돌아가기</a>
+    </div>
+</body>
+</html>

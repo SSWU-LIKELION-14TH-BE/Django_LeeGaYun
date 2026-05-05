@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import signup_view, login_view, home_view, logout_view, find_password_view, reset_password_view, mypage_view, mypage_edit_view, mypage_post_list_view
+from .views import signup_view, login_view, home_view, logout_view, find_password_view, reset_password_view, mypage_view, mypage_edit_view, mypage_post_list_view, profile_view, my_guestbook_view, guestbook_reply_view, guestbook_written_view
 
 urlpatterns = [
     path('signup/', signup_view, name='signup'),
@@ -11,4 +11,8 @@ urlpatterns = [
     path('mypage/', mypage_view, name='mypage'),
     path('mypage/edit/', mypage_edit_view, name='mypage_edit'),
     path('mypage/posts/', mypage_post_list_view, name='mypage_post_list'),
+    path('profile/<str:username>/', profile_view, name='profile'),
+    path('mypage/guestbook/', my_guestbook_view, name='my_guestbook'),
+    path('mypage/guestbook/<int:pk>/reply/', guestbook_reply_view, name='guestbook_reply'),
+    path('mypage/guestbook/written/', guestbook_written_view, name='guestbook_written'),
 ]

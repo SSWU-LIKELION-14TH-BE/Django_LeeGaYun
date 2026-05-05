@@ -15,7 +15,9 @@
             <li>이메일: {{ user.email }}</li>
         </ul>
         <a class="mypage-detail-btn" href="{% url 'mypage_edit' %}">회원정보 수정</a><br>
-        <a class="mypage-detail-btn" href="{% url 'mypage_post_list' %}">내가 쓴 게시물</a>
+        <a class="mypage-detail-btn" href="{% url 'mypage_post_list' %}">내가 쓴 게시물</a><br>
+        <a class="mypage-detail-btn" href="{% url 'my_guestbook' %}">내 방명록</a><br>
+        <a class="mypage-detail-btn" href="{% url 'guestbook_written' %}">내가 남긴 방명록</a>
 
         {% if user.is_authenticated %}
         <form action="{% url 'logout' %}" method="post" class="mypage-logout-btn">

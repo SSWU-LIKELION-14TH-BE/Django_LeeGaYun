@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내가 남긴 방명록</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}">
+</head>
+<body>
+    <div class="mypage-wrapper">
+        <h2>내가 남긴 방명록</h2>
+        <ul>
+            {% for g in my_guestbooks %}
+                <li style="margin-bottom:16px;">
+                    <b>To {{ g.owner.user_id }}</b> ({{ g.created_at|date:"Y-m-d H:i" }})<br>
+                    {{ g.content|linebreaksbr }}
+                    {% with replies_g=replies.g.pk %}
+                        {% if replies_g %}
+                            <div style="margin-top:8px; color:#2253f7;">
+                                답글:
+                                {% for r in replies_g %}
+                                    {{ r.content|linebreaksbr }} ({{ r.created_at|date:"Y-m-d H:i" }})<br>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                </li>
+            {% empty %}
+                <li>내가 남긴 방명록이 없습니다.</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'mypage' %}">마이페이지로 돌아가기</a>
+    </div>
+</body>
+</html>

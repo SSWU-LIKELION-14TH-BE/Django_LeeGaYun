@@ -11,6 +11,8 @@ from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from post.models import Post
 from django.shortcuts import get_object_or_404
+from .forms import GuestbookForm
+from .models import Guestbook
 
 def find_password_view(request):
     step = request.session.get('step', 1)
@@ -155,3 +157,53 @@ def mypage_edit_view(request):
 def mypage_post_list_view(request):
     posts = Post.objects.filter(author=request.user).order_by('-created_at')
     return render(request, 'mypage_post_list.html', {'posts': posts})
+
+@login_required
+def my_guestbook_view(request):
+    guestbooks = Guestbook.objects.filter(owner=request.user, parent__isnull=True)
+    return render(request, 'my_guestbook.html', {'guestbooks': guestbooks})
+
+@login_required
+def guestbook_reply_view(request, pk):
+    guestbook = get_object_or_404(Guestbook, pk=pk, owner=request.user)
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            Guestbook.objects.create(
+                owner=request.user,
+                author=request.user,
+                content=content,
+                parent=guestbook
+            )
+            return redirect('my_guestbook')
+    return render(request, 'guestbook_reply.html', {'guestbook': guestbook})
+
+@login_required
+def guestbook_written_view(request):
+    # 내가 남긴 방명록(내가 author인 것) + 답글(부모가 내 글인 것)
+    my_guestbooks = Guestbook.objects.filter(author=request.user, parent__isnull=True)
+    # 각 방명록에 달린 답글(주인=상대방, 부모=내가 쓴 글)
+    replies = {g.pk: g.replies.all() for g in my_guestbooks}
+    return render(request, 'guestbook_written.html', {'my_guestbooks': my_guestbooks, 'replies': replies})
+
+def profile_view(request, username):
+    user_profile = get_object_or_404(CustomUser, username=username)
+    guestbook_form = None
+    if request.user.is_authenticated and request.user != user_profile:
+        if request.method == 'POST':
+            guestbook_form = GuestbookForm(request.POST)
+            if guestbook_form.is_valid():
+                Guestbook.objects.create(
+                    owner=user_profile,
+                    author=request.user,
+                    content=guestbook_form.cleaned_data['content']
+                )
+                return redirect('profile', username=username)
+        else:
+            guestbook_form = GuestbookForm()
+    guestbooks = Guestbook.objects.filter(owner=user_profile, parent__isnull=True)
+    return render(request, 'profile.html', {
+        'profile_user': user_profile,
+        'guestbook_form': guestbook_form,
+        'guestbooks': guestbooks,
+    })
