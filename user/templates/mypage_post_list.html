@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내가 쓴 게시물</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}">
+</head>
+<body>
+    <div class="mypage-wrapper">
+        <h2>내가 쓴 게시물</h2>
+        <ul>
+            {% for post in posts %}
+                <li style="margin-bottom: 20px;">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="이미지" class="mypage-post-list-img">
+                    {% endif %}
+                    <span class="mypage-post-list-title">{{ post.title }}</span>
+                    <span class="mypage-post-list-date">{{ post.created_at|date:"Y-m-d H:i" }}</span>
+                    <a class="" href="{% url 'post_detail' post.pk %}" style="margin-left:10px;">상세보기</a>
+                </li>
+            {% empty %}
+                <li>작성한 게시물이 없습니다.</li>
+            {% endfor %}
+        </ul>
+        <a class="mypage-link-btn" href="{% url 'mypage' %}">마이페이지로 돌아가기</a>
+    </div>
+</body>
+</html>

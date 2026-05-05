@@ -105,3 +105,36 @@ class LoginForm(AuthenticationForm):
         for field in self.fields.values():
             field.help_text = ''
             field.widget.attrs.update({'class': 'login-input'})
+
+class UserUpdateForm(forms.ModelForm):
+    password = forms.CharField(
+        label='새 비밀번호',
+        widget=forms.PasswordInput(attrs={'class': 'signup-input', 'placeholder': '새 비밀번호'}),
+        required=False
+    )
+    password_confirm = forms.CharField(
+        label='비밀번호 확인',
+        widget=forms.PasswordInput(attrs={'class': 'signup-input', 'placeholder': '비밀번호 확인'}),
+        required=False
+    )
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'user_id', 'password', 'password_confirm']
+        labels = {
+            'username': '아이디',
+            'user_id': '닉네임',
+        }
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'signup-input', 'placeholder': '아이디'}),
+            'user_id': forms.TextInput(attrs={'class': 'signup-input', 'placeholder': '닉네임'}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password_confirm = cleaned_data.get('password_confirm')
+        if password or password_confirm:
+            if password != password_confirm:
+                raise forms.ValidationError('비밀번호가 일치하지 않습니다.')
+        return cleaned_data

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}">
+</head>
+<body>
+    <div class="mypage-wrapper">
+        <h2>마이페이지</h2>
+        <ul>
+            <li>아이디: {{ user.username }}</li>
+            <li>닉네임: {{ user.user_id }}</li>
+            <li>이메일: {{ user.email }}</li>
+        </ul>
+        <a class="mypage-detail-btn" href="{% url 'mypage_edit' %}">회원정보 수정</a><br>
+        <a class="mypage-detail-btn" href="{% url 'mypage_post_list' %}">내가 쓴 게시물</a>
+
+        {% if user.is_authenticated %}
+        <form action="{% url 'logout' %}" method="post" class="mypage-logout-btn">
+            {% csrf_token %}
+            <button type="submit">로그아웃</button>
+        </form>
+    {% endif %}
+</body>
+    </div>
+</html>

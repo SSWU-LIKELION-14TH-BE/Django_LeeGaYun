@@ -4,9 +4,13 @@ from django.urls import reverse
 from .forms import SignUpForm
 from .forms import LoginForm
 from .forms_password import FindPasswordForm, VerifyCodeForm, ResetPasswordForm
+from .forms import UserUpdateForm
 from .models import CustomUser
 import random
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from post.models import Post
+from django.shortcuts import get_object_or_404
 
 def find_password_view(request):
     step = request.session.get('step', 1)
@@ -124,3 +128,30 @@ def logout_view(request):
 
 def home_view(request):
     return render(request, 'home.html')
+
+# 로그인 한 사용자만 가능 -> 마이페이지
+@login_required
+def mypage_view(request):
+    user = request.user
+    return render(request, 'mypage.html', {'user': user})
+
+@login_required
+def mypage_edit_view(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            password = form.cleaned_data.get('password')
+            if password:
+                user.set_password(password)
+            user.save()
+            return redirect('mypage')
+    else:
+        form = UserUpdateForm(instance=user)
+    return render(request, 'mypage_edit.html', {'form': form})
+
+@login_required
+def mypage_post_list_view(request):
+    posts = Post.objects.filter(author=request.user).order_by('-created_at')
+    return render(request, 'mypage_post_list.html', {'posts': posts})

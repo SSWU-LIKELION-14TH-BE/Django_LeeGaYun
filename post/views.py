@@ -43,6 +43,8 @@ def post_detail_view(request, pk):
 
 	# 댓글/대댓글 작성 처리
 	if request.method == 'POST' and 'comment_submit' in request.POST:
+		if not request.user.is_authenticated:
+			return redirect('login')
 		comment_form = CommentForm(request.POST)
 		if comment_form.is_valid():
 			new_comment = comment_form.save(commit=False)
@@ -85,3 +87,24 @@ def comment_like_view(request, comment_id):
 	else:
 		comment.likes.add(user)
 	return redirect('post_detail', pk=comment.post.pk)
+
+@login_required
+def post_edit_view(request, pk):
+    post = get_object_or_404(Post, pk=pk, author=request.user)
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'post_edit.html', {'form': form, 'post': post})
+
+@login_required
+def post_delete_view(request, pk):
+    post = get_object_or_404(Post, pk=pk, author=request.user)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('mypage_post_list')
+    # GET 요청 시 바로 삭제하지 않고, JS confirm으로 처리
+    return redirect('post_detail', pk=post.pk)
