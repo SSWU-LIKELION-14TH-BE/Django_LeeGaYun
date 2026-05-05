@@ -138,3 +138,10 @@ class UserUpdateForm(forms.ModelForm):
             if password != password_confirm:
                 raise forms.ValidationError('비밀번호가 일치하지 않습니다.')
         return cleaned_data
+
+class GuestbookForm(forms.Form):
+    content = forms.CharField(
+        label='',
+        widget=forms.Textarea(attrs={'rows': 2, 'placeholder': '방명록을 남겨보세요!', 'class': 'signup-input'}),
+        max_length=300
+    )

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내 방명록</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}">
+</head>
+<body>
+    <div class="mypage-wrapper">
+        <h2>내 방명록</h2>
+        <ul>
+            {% for g in guestbooks %}
+                <li style="margin-bottom:16px;">
+                    <b>{{ g.author.user_id }}</b> ({{ g.created_at|date:"Y-m-d H:i" }})<br>
+                    {{ g.content|linebreaksbr }}
+                    {% if not g.replies.exists %}
+                        <form method="post" action="{% url 'guestbook_reply' g.pk %}" style="margin-top:8px;">
+                            {% csrf_token %}
+                            <textarea name="content" rows="1" placeholder="답글을 입력하세요" class="signup-input"></textarea>
+                            <button type="submit" class="mypage-edit-btn">답글</button>
+                        </form>
+                    {% else %}
+                        <div style="margin-top:8px; color:#2253f7;">
+                            답글: {{ g.replies.first.content }}
+                        </div>
+                    {% endif %}
+                </li>
+            {% empty %}
+                <li>아직 방명록이 없습니다.</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'mypage' %}">마이페이지로 돌아가기</a>
+    </div>
+</body>
+</html>

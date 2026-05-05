@@ -10,3 +10,14 @@ class CustomUser(AbstractUser):
 
     groups = models.ManyToManyField(Group, related_name='customuser_set', blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name='customuser_permissions_set', blank=True)
+
+# 방명록 모델
+class Guestbook(models.Model):
+    owner = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='guestbooks')  # 방명록 주인
+    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='guestbook_written')  # 작성자
+    content = models.TextField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')  # 답글
+
+    class Meta:
+        ordering = ['-created_at']
