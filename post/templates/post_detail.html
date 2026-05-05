@@ -24,6 +24,15 @@
                 <div class="like-count-text">
                     좋아요(<span id="like-count">{{ post.like_count }}</span>)
                 </div>
+                {% if user.is_authenticated and user == post.author %}
+                <div class="post-edit-delete-btns">
+                    <a href="{% url 'post_edit' post.pk %}" class="post-detail-btn">수정</a>
+                    <form method="post" action="{% url 'post_delete' post.pk %}" onsubmit="return confirm('정말로 이 게시물을 삭제하시겠습니까?');">
+                        {% csrf_token %}
+                        <button type="submit" class="post-detail-btn">삭제</button>
+                    </form>
+                </div>
+                {% endif %}
             </div>
         </div>
         <p>

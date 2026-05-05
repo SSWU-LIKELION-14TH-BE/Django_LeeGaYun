@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원정보 수정</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}">
+</head>
+<body>
+    <div class="mypage-wrapper">
+        <h2>회원정보 수정</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="mypage-edit-btn">수정 완료</button>
+        </form>
+        <a href="{% url 'mypage' %}" class="mypage-link-btn">마이페이지로 돌아가기</a>
+    </div>
+</body>
+</html>
