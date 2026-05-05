@@ -43,6 +43,8 @@ def post_detail_view(request, pk):
 
 	# 댓글/대댓글 작성 처리
 	if request.method == 'POST' and 'comment_submit' in request.POST:
+		if not request.user.is_authenticated:
+			return redirect('login')
 		comment_form = CommentForm(request.POST)
 		if comment_form.is_valid():
 			new_comment = comment_form.save(commit=False)
