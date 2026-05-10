@@ -26,6 +26,7 @@ urlpatterns = [
     path('user/', include('user.urls')),
     # 게시글 관련 URL
     path('post/', include('post.urls')),
+    path('auth/', include('social_django.urls', namespace='social')),    # /auth/로 시작하는 경로(소셜 로그인 기본)
 ]
 
 # 개발 환경에서 media 파일 서빙

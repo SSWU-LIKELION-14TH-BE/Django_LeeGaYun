@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--#k+@14m$vwg9^2_d9-ct2!syf&oo5^l8g=7*al258sx2e-vwz'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user',
     'post',
+    'social_django',  # 소셜 로그인 앱
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,17 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 LOGIN_URL = '/user/login/'
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.kakao.KakaoOAuth2',
+    'social_core.backends.naver.NaverOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_KAKAO_KEY = os.getenv('KAKAO_KEY')
+SOCIAL_AUTH_KAKAO_SECRET = os.getenv('KAKAO_SECRET')
+
+SOCIAL_AUTH_NAVER_KEY = os.getenv('NAVER_KEY')
+SOCIAL_AUTH_NAVER_SECRET = os.getenv('NAVER_SECRET')
+
+LOGIN_REDIRECT_URL = '/user'
+LOGOUT_REDIRECT_URL = '/user'
