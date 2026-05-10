@@ -106,3 +106,28 @@ input:focus {
     margin: 0 6px;
     color: #bbb;
 }
+
+.social-login-buttons{
+    margin-top: 24px;
+    text-align: center;
+}
+
+.naver-login-btn {
+    display: inline-block;
+    margin: 8px 0;
+    padding: 10px 24px;
+    background: #1ec800;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.kakao-login-btn {
+    display: inline-block;
+    margin: 8px 0;
+    padding: 10px 24px;
+    background: #fee500;
+    color: #3c1e1e;
+    border-radius: 4px;
+    text-decoration: none;
+}
